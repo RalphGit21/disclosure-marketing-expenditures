@@ -7,7 +7,18 @@ This GitHub repository is part of the Master Thesis conducted and written by [Ra
 To sell products and services to customers and to increase market share and valuation, companies make use of marketing expenditures such as advertising expenses, promotional spending and market research (Chauvin & Hirschey, 1993; M. Conchar et al., 2005). Previously, it was mandatory for companies to disclose the amount they spent on such advertising expenses, until the SEC made it voluntary to publish these numbers in 1994, leading to a decrease in the number of companies publishing advertising expenses. This study investigates the how making voluntarily disclosures on such marketing expenditures affects firm value.
 
 ## Repository Overview
-
+```txt
+├── Data <-- Holds all the datasets that are used and called in the scripts (these are not on Github for the reasons described above) 
+├── Gen 
+│   ├── Output <-- Contains the final datasets on which the analyses are  conducted (and additional metadata and/or PDFs if relevant)
+│   └── Temp <-- Contains temporary files that are created during the cleaning phase, from which the output files are created
+└── Src
+    └── Data-Preparation 
+        ├── Clean.R <-- Clean the data
+        └── Join.R <-- Join the relevant datasets
+        └── Dummies.R <-- Create dummies and control variables
+        └── Analysis.R <-- Conduct analyses
+```
 ## Method and Results
 
 ## Packages used
