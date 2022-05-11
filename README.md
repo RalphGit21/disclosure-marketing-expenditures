@@ -15,8 +15,8 @@ To sell products and services to customers and to increase market share and valu
 └── Src
     └── Data-Preparation 
         ├── Clean.R <-- Clean the data
-        └── Join.R <-- Join the relevant datasets
-        └── Dummies.R <-- Create dummies and control variables
+        ├── Join.R <-- Join the relevant datasets
+        ├── Dummies.R <-- Create dummies and control variables
         └── Analysis.R <-- Conduct analyses
 ```
 ## Method and Results
