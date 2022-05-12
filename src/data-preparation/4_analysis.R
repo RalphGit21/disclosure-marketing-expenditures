@@ -1,30 +1,56 @@
-df2 <- read.csv2("../../gen/output/final_dataset3.csv") # In Excel, some lag_Q values are set to NA if gaps exist within companies (e.g., salesforce 2012, 2013, 2014 is missing, is lag_Q of 2015 should NOT be Q from 2011)
+df2 <- read.csv2("../../gen/output/final_dataset_new3.csv") # In Excel, some lag_Q values are set to NA if gaps exist within companies (e.g., salesforce 2012, 2013, 2014 is missing, is lag_Q of 2015 should NOT be Q from 2011)
 
-df_filt <- df2 %>% select(conm, fyear, at, Q, lag_Q, dum, B2B, dq_quality, interest, CAGR, firm_size)
+df_filt <- df2 %>% select(conm, fyear, at, Q, lag_Q, dum, B2B, dq_quality, firm_size, leverage, revt_change, lag_Q)
 
-t <- lm(lag_Q ~ dum * dq_quality + dum * B2B, data = df_filt)
+t <- lm(Q ~ dum * dq_quality + B2B + dum:B2B + firm_size + leverage + revt_change + lag_Q, data = df_filt)
 summary(t)
 
 library(fixest)
-model_1 <- feols(lag_Q ~ dum * dq_quality + dum * B2B,
+library(tidyr)
+library(modelsummary)
+
+model_1 <- feols(Q ~ dum * dq_quality + B2B + dum:B2B + firm_size + lag_Q + leverage + revt_change
+                 |
+                 fyear, # Fixed effects (as fyear changes at constant rate over time)
                  data = df_filt,
-                 cluster = ~ conm)
+                 cluster = ~ {conm}) # Cluster for each company
 
 summary(model_1)
 
 
-t2 <- lm(lag_Q ~ dum + dq_quality + B2B + interest + CAGR + firm_size, data = df_filt)
-summary(t2)
+model_2 <- lm(Q ~ dum * dq_quality + dum * B2B + CAGR + firm_size + lag_Q, data = df_filt)
+summary(model_2)
+
+model_3 <- lm(lag_Q ~ dum * dq_quality + dum * B2B, data = df_filt)
+summary(model_3)
+
+#install.packages("sampleSelection")
+library(sampleSelection)
+model_3 <- selection(lag_Q ~ dq_quality + dum * B2B + CAGR + firm_size)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 # CORRELATION MATRIX
-df_filt <- df2 %>% select(lag_Q, dum, B2B, dq_quality, interest, CAGR, firm_size)
+df_filt2 <- df2 %>% select(lag_Q, dum, B2B, dq_quality, firm_size, leverage, revt_change, lag_Q)
 
 install.packages("rstatix")
 library(rstatix)
 
-cor.mat <- df_filt %>% cor_mat(); cor.mat
+cor.mat <- df_filt2 %>% cor_mat(); cor.mat
 cor.mat %>% cor_get_pval()
 
 sapply(df_filt, mean, na.rm =TRUE)
