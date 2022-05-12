@@ -1,5 +1,5 @@
 # Import the transformed dataset (previously joined_data, renamed to final_dataset)
-df <- read.csv2("final_dataset.csv")
+df <- read.csv2("../../gen/temp/processed_dataset.csv")
 df <- df %>% mutate(Q = (at + csho * prcc_f - ceq - txdb) / at)
 df <- na.omit(df) #Last 5 rows are all NAs, 220 --> 215 observations
 
@@ -18,10 +18,11 @@ df$mkt_q <- ifelse(df$Marketing_expenses == "ND", 0, ifelse(df$Marketing_expense
 
 df <- df %>% mutate(dq_quality = adv_q + com_q + mkt_q)
 
-data_main_filt2 <- data_main %>% select(conm, act, at, cogs, dltt, ebit, emp, ib, invt, lct, lt, oancf, ppent, revt, xad, xopr, xrd, xsga)
-df <- inner_join(data_main_filt2, df , by = "at")
-df$conm.y <- NULL
-names(df)[1] <- 'conm'
+
+#data_main_filt2 <- data_main %>% select(conm, act, at, cogs, dltt, ebit, emp, ib, invt, lct, lt, oancf, ppent, revt, xad, xopr, xrd, xsga)
+#df <- inner_join(data_main_filt2, df , by = "at")
+#df$conm.y <- NULL
+#names(df)[1] <- 'conm'
 
 ################# CONTROL VARIABLE 1: INTEREST RATES
 df <- df %>% 
