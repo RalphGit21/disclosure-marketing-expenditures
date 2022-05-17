@@ -48,3 +48,7 @@ df <- df %>% group_by(conm) %>% mutate(lag_Q = lag(Q, n = 1, order_by = fyear))
 
 dir.create("../../gen/output")
 write.csv2(df, "../../gen/output/final_dataset_new.csv", row.names = FALSE)
+
+
+write.csv2(df, "../../gen/output/final_dataset_new_inclyear.csv", row.names = FALSE)
+
