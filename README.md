@@ -17,9 +17,11 @@ To sell products and services to customers and to increase market share and valu
         ├── Clean.R <-- Clean the data
         ├── Join.R <-- Join the relevant datasets
         ├── Dummies.R <-- Create dummies and control variables
-        └── Analysis.R <-- Conduct analyses
+        ├── Analysis.R <-- Conduct analyses
+        └── Sensitivity.R <-- Conduct sensitivity analyses
 ```
 ## Method and Results
+
 
 ## Packages used
 The following packages have been installed and called within this repository:
