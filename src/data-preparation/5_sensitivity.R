@@ -35,14 +35,14 @@ df3 <- df3 %>%
     adv_q == 2 & com_q == 0 & mkt_q == 4 ~ 7,
     adv_q == 2 & com_q == 1 & mkt_q == 2 ~ 7, # If disclosures on all 3 components, DQ + 2.
     adv_q == 2 & com_q == 1 & mkt_q == 4 ~ 9,
-    adv_q == 2 & com_q == 2 & mkt_q == 2 ~ 8,
-    adv_q == 2 & com_q == 2 & mkt_q == 4 ~ 10,
+    adv_q == 2 & com_q == 2 & mkt_q == 2 ~ 2, # -6 due to collinearity issues previously described 
+    adv_q == 2 & com_q == 2 & mkt_q == 4 ~ 4, # -6 due to collinearity issues previously described 
     adv_q == 4 & com_q == 0 & mkt_q == 2 ~ 7,
-    adv_q == 4 & com_q == 0 & mkt_q == 4 ~ 9,
-    adv_q == 4 & com_q == 1 & mkt_q == 2 ~ 9,
-    adv_q == 4 & com_q == 1 & mkt_q == 4 ~ 11,
-    adv_q == 4 & com_q == 2 & mkt_q == 2 ~ 10,
-    adv_q == 4 & com_q == 2 & mkt_q == 4 ~ 12,
+    adv_q == 4 & com_q == 0 & mkt_q == 4 ~ 3, # -6 due to collinearity issues previously described 
+    adv_q == 4 & com_q == 1 & mkt_q == 2 ~ 3, # -6 due to collinearity issues previously described 
+    adv_q == 4 & com_q == 1 & mkt_q == 4 ~ 5, # -6 due to collinearity issues previously described 
+    adv_q == 4 & com_q == 2 & mkt_q == 2 ~ 4, # -6 due to collinearity issues previously described 
+    adv_q == 4 & com_q == 2 & mkt_q == 4 ~ 6, # -6 due to collinearity issues previously described 
     adv_q == 2 & com_q == 0 & mkt_q == 0 ~ 2,
     adv_q == 4 & com_q == 0 & mkt_q == 0 ~ 4,
     adv_q == 0 & com_q == 1 & mkt_q == 0 ~ 1,
@@ -52,11 +52,11 @@ df3 <- df3 %>%
     adv_q == 2 & com_q == 1 & mkt_q == 0 ~ 4,
     adv_q == 2 & com_q == 2 & mkt_q == 0 ~ 5,
     adv_q == 4 & com_q == 1 & mkt_q == 0 ~ 6,
-    adv_q == 4 & com_q == 2 & mkt_q == 0 ~ 7,
+    adv_q == 4 & com_q == 2 & mkt_q == 0 ~ 1, # -6 due to collinearity issues previously described 
     adv_q == 0 & com_q == 1 & mkt_q == 2 ~ 4,
     adv_q == 0 & com_q == 2 & mkt_q == 2 ~ 5,
     adv_q == 0 & com_q == 1 & mkt_q == 4 ~ 6,
-    adv_q == 0 & com_q == 2 & mkt_q == 4 ~ 7,
+    adv_q == 0 & com_q == 2 & mkt_q == 4 ~ 1, # -6 due to collinearity issues previously described 
     TRUE ~ 0 ) )
 
 model_sens_2syn <- lm(log(Q) ~ dum * dq_quality_syn + dum * B2B + firm_size + leverage + revt_change + lag_Q + as.factor(fyear), data = df3)

@@ -21,13 +21,6 @@ df$mkt_q <- ifelse(df$Marketing_expenses == "ND", 0, ifelse(df$Marketing_expense
 df <- df %>% mutate(dq_quality = adv_q + com_q + mkt_q)
 
 
-#data_main_filt2 <- data_main %>% select(conm, act, at, cogs, dltt, ebit, emp, ib, invt, lct, lt, oancf, ppent, revt, xad, xopr, xrd, xsga)
-#df <- inner_join(data_main_filt2, df , by = "at")
-#df$conm.y <- NULL
-#names(df)[1] <- 'conm'
-
-
-
 ################# CONTROL VARIABLE 1: firm size
 
 df <- df %>% mutate(firm_size = log(at))
@@ -49,11 +42,5 @@ df$revt_change <- ifelse(df$revt_change > 197.91255, 197.91255, df$revt_change) 
 df <- df %>% group_by(conm) %>% mutate(lag_Q = lag(Q, n = 1, order_by = fyear))
 
 dir.create("../../gen/output")
-#Newest
 write.csv2(df, "../../gen/output/final_dataset_all.csv", row.names = FALSE)
-
-write.csv2(df, "../../gen/output/final_dataset_new.csv", row.names = FALSE)
-
-
-write.csv2(df, "../../gen/output/final_dataset_new_inclyear.csv", row.names = FALSE)
 

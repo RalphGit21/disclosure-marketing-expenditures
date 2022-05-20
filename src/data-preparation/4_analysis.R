@@ -39,13 +39,6 @@ model_3 <- lm(log(Q) ~ dum * dq_quality_new + B2B + dum:B2B + firm_size + levera
 summary(model_3)
 
 
-model_final <- lm(log(Q) ~ dum * dq_quality + B2B + dum:B2B + firm_size3 + leverage2 + revt_change + lag_Q + as.factor(fyear) + as.factor(industry), data = df3)
-summary(model_final)
-
-
-
-
-
 
 
 # CORRELATION MATRIX
@@ -61,6 +54,7 @@ sapply(df_filt2, mean, na.rm =TRUE)
 sapply(df_filt2, sd, na.rm =TRUE)
 sapply(df_filt2, min, na.rm =TRUE)
 sapply(df_filt2, max, na.rm =TRUE)
+
 
 ## TEST AVERAGES
 df3 <- df2 %>% filter(adv_exp > 0)
