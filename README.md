@@ -14,11 +14,11 @@ To sell products and services to customers and to increase market share and valu
 │   └── Temp <-- Contains temporary files that are created during the cleaning phase, from which the output files are created
 └── Src
     └── Data-Preparation 
-        ├── Clean.R <-- Clean the data
-        ├── Join.R <-- Join the relevant datasets
-        ├── Dummies.R <-- Create dummies and control variables
-        ├── Analysis.R <-- Conduct analyses
-        └── Sensitivity.R <-- Conduct sensitivity analyses
+        ├── 1_clean.R <-- Clean the data
+        ├── 2_join.R <-- Join the relevant datasets
+        ├── 3_dummies.R <-- Create dummies and control variables
+        ├── 4_analysis.R <-- Conduct analyses
+        └── 5_sensitivity.R <-- Conduct sensitivity analyses
 ```
 ## Method and Results
 
