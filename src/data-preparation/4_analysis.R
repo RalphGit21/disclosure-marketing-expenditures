@@ -3,46 +3,41 @@ df2 <- read.csv2("../../gen/output/final_dataset_all_processed.csv") # In Excel,
 library(tidyr)
 df2 <- df2 %>% drop_na(lag_Q)
 
-df_filt <- df2 %>% select(conm, fyear, at, Q, lag_Q, dum, B2B, dq_quality_new, firm_size, leverage, revt_change, lag_Q)
+df_filt <- df2 %>% select(conm, fyear, at, Q, lag_Q, dum, B2B, dq_quality, firm_size, leverage, revt_change, lag_Q)
 
 ## VIF VALUES
 library(car)
 model_vif_old <- lm(Q ~ dum + dq_quality + B2B + firm_size + leverage + revt_change + lag_Q, data = df2)
 vif(model_vif_old)
 
-# Transform DQ variable:
-df2$quality1 <- ifelse(df2$dum == 1, df2$dq_quality - 6, 0)
-df2$quality2 <- ifelse(df2$dum == 0, df2$dq_quality, 0)
+# Center DQ at 6
+pct_Q <- quantile(df2$Q, c(.025, 0.975), na.rm = TRUE) 
+df2$Q <- ifelse(df2$Q > pct_Q[2], pct_Q[2], d$Q)
+df2$Q <- ifelse(df2$Q < pct_Q[1], pct_Q[1], d$Q)
+summary(df2$Q)
 
-df2 <- df2 %>% mutate(dq_quality_new = quality1 + quality2)
-
-model_vif_new <- lm(Q ~ dum + dq_quality_new + B2B + firm_size + leverage + revt_change + lag_Q, data = df2)
-vif(model_vif_new)
+df2$quality_cent <- df2$dq_quality - 6 # Centering the moderator
 
 
 #Fitted vs residuals and 
-plot(lm(df_filt$Q ~ df_filt$dum))
-df_filt <- df_filt %>% mutate(log_Q = log(Q))
-
-temp <- df_filt %>% mutate(extra = log(Q))
-plot(lm(temp$extra ~ temp$dum))
+df2$log_Q <- log(df2$Q)
+plot(lm(df2$Q ~ df2$dum))
+plot(lm(d$log_Q ~ d$dum))
 
 
-
-model_1 <- lm(log(Q) ~ dum + firm_size + leverage + revt_change + lag_Q, data = df_filt)
+# Models M1, M2 & M3
+model_1 <- lm(Q ~ dum + firm_size + leverage + revt_change + lag_Q, data = df2)
 summary(model_1)
 
-model_2 <- lm(log(Q) ~ dum * dq_quality_new + B2B + dum:B2B + firm_size + leverage + revt_change + lag_Q, data = df_filt)
+model_2 <- lm(Q ~ dum * quality_cent + B2B + dum:B2B + firm_size + leverage + revt_change + lag_Q, data = df2)
 summary(model_2)
 
-model_3 <- lm(log(Q) ~ dum * dq_quality_new + B2B + dum:B2B + firm_size + leverage + revt_change + lag_Q + as.factor(fyear), data = df_filt)
+model_3 <- lm(Q ~ dum * quality_cent + B2B + dum:B2B + firm_size + leverage + revt_change + lag_Q + as.factor(fyear), data = df2)
 summary(model_3)
 
 
-
-
 # CORRELATION MATRIX
-df_filt2 <- df2 %>% select(Q, dum, B2B, dq_quality_new, firm_size, leverage, revt_change, lag_Q)
+df_filt2 <- df3 %>% select(Q, dum, B2B, quality_centered, firm_size, leverage, revt_change, lag_Q)
 
 install.packages("rstatix")
 library(rstatix)
