@@ -2,26 +2,24 @@
 df3 <- read.csv2("../../gen/output/final_dataset_all_processed.csv")
 df3 <- df3 %>% drop_na(lag_Q)
 
+# Center disclosure quality
+df3$quality_cent <- df3$dq_quality - 6 
 
-
+# Windorize Q values
 pct_Q <- quantile(df3$Q, c(.025, 0.975), na.rm = TRUE) 
-df3$Q <- ifelse(df3$Q > pct_Q[2], pct_Q[2], d$Q)
-df3$Q <- ifelse(df3$Q < pct_Q[1], pct_Q[1], d$Q)
-summary(df3$Q)
-
-df3$quality_cent <- df3$dq_quality - 6 # Centering the moderator at 6
-
+df3$Q <- ifelse(df3$Q > pct_Q[2], pct_Q[2], df3$Q)
+df3$Q <- ifelse(df3$Q < pct_Q[1], pct_Q[1], df3$Q)
 
 # Sensitivity (1/5): Look at separate components as disclosure (resulting in 3 new models)
 
 # More lenient method of defining IV (voluntary disclosure of marketing expenditures) - at least 1 component
 df3$dum_new <- ifelse(df3$adv_exp != "ND" | df3$com_exp != "ND" | df3$mkt_exp != "ND", 1, 0)
 
-model_4 <- lm(Q ~ dum_new + firm_size + leverage + revt_change + lag_Q, data = df3)
-summary(model_4)
+model_sens_1_basic <- lm(Q ~ dum_new + firm_size + leverage + revt_change + lag_Q, data = df3)
+summary(model_sens_1_basic)
 
-model_5 <- lm(Q ~ dum_new * quality_cent + B2B + dum_new:B2B  + firm_size + leverage + revt_change + lag_Q + as.factor(fyear), data = df3)
-summary(model_5)
+model_sens_1_full <- lm(Q ~ dum_new * quality_cent + B2B + dum_new:B2B  + firm_size + leverage + revt_change + lag_Q + as.factor(fyear), data = df3)
+summary(model_sens_1_full)
 
 
 # Sensitivity (2/5): Scoring system changes: all components score equally AND sum the numnber of components that are disclosed
@@ -53,12 +51,11 @@ summary(model_sens_3_size2)
 model_sens_3_size3 <- lm(Q ~ dum * quality_cent + B2B + dum:B2B + firm_size3 + leverage + revt_change + lag_Q + as.factor(fyear), data = df3)
 summary(model_sens_3_size3)
 
-# Firm size3 is best, so continue with that and add leverage2 and liquidity
 
-model_sens_3_lev2 <- lm(Q ~ dum * quality_cent + B2B + dum:B2B + firm_size3 + leverage2 + revt_change + lag_Q + as.factor(fyear), data = df3)
+model_sens_3_lev2 <- lm(Q ~ dum * quality_cent + B2B + dum:B2B + firm_size + leverage2 + revt_change + lag_Q + as.factor(fyear), data = df3)
 summary(model_sens_3_lev2)
 
-model_sens_3_liq <- lm(Q ~  dum * quality_cent + B2B + dum:B2B + firm_size3 + leverage2 + liquidity + revt_change + lag_Q + as.factor(fyear), data = df3)
+model_sens_3_liq <- lm(Q ~  dum * quality_cent + B2B + dum:B2B + firm_size + leverage + liquidity + revt_change + lag_Q + as.factor(fyear), data = df3)
 summary(model_sens_3_liq)
 
 # Sensitivity (4/5): Firm-specific fixed effects and industry-specific fixed effects
@@ -94,5 +91,5 @@ df3 <- df3 %>% mutate(total_scaled = adv_scaled + com_scaled + mkt_scaled)
 model_sens_5_adv_exp <- lm(Q ~ dum * quality_cent + B2B + dum:B2B + total_scaled + firm_size + leverage + revt_change + lag_Q + as.factor(fyear), data = df3)
 summary(model_sens_5_adv_exp)
 
-write.csv2(df3, "../../gen/output/full_dataset", row.names = FALSE)
+write.csv2(df3, "../../gen/output/full_dataset.csv", row.names = FALSE)
 

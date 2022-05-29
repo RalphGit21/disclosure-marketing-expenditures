@@ -10,13 +10,13 @@ library(car)
 model_vif_old <- lm(Q ~ dum + dq_quality + B2B + firm_size + leverage + revt_change + lag_Q, data = df2)
 vif(model_vif_old)
 
-# Center DQ at 6
+# Winsorize Q values
 pct_Q <- quantile(df2$Q, c(.025, 0.975), na.rm = TRUE) 
-df2$Q <- ifelse(df2$Q > pct_Q[2], pct_Q[2], d$Q)
-df2$Q <- ifelse(df2$Q < pct_Q[1], pct_Q[1], d$Q)
-summary(df2$Q)
+df2$Q <- ifelse(df2$Q > pct_Q[2], pct_Q[2], df2$Q)
+df2$Q <- ifelse(df2$Q < pct_Q[1], pct_Q[1], df2$Q)
 
-df2$quality_cent <- df2$dq_quality - 6 # Centering the moderator
+# Center disclosure quality
+df2$quality_cent <- df2$dq_quality - 6 
 
 
 #Fitted vs residuals and 
@@ -37,7 +37,7 @@ summary(model_3)
 
 
 # CORRELATION MATRIX
-df_filt2 <- df3 %>% select(Q, dum, B2B, quality_centered, firm_size, leverage, revt_change, lag_Q)
+df_filt2 <- df2 %>% select(Q, dum, B2B, quality_cent, firm_size, leverage, revt_change, lag_Q)
 
 install.packages("rstatix")
 library(rstatix)
